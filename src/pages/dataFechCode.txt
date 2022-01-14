@@ -1,0 +1,78 @@
+
+
+//TODO getServerSideProps
+
+import Error from 'next/error'
+
+const Sup = ({errorCode, message}) => {
+    if (errorCode){
+       return <Error statusCode={errorCode} title={message} />
+    }
+    return (
+        <>
+            <h1>{message}</h1>
+        </>
+    )
+}
+
+export const getServerSideProps = (context) => {
+    try {
+        return { props: { message: 'message' },
+            // notFound: object ? false : true,
+            // redirect: {
+            //     destination: '/',
+            //     permanent: true
+            // }
+        }
+    } catch (error) {
+        return { props: { errorCode: 403, message: 'broken'} }
+    }
+
+}
+
+export default Sup;
+
+/////TODO getStaticProps
+
+import { useEffect } from 'react'
+
+const About = () => {
+    return (
+        <>
+            <h1>Yo its me</h1>
+        </>
+    )
+}
+
+export const getStaticProps = (context) => {
+    return {
+        props: {},
+        revalidate: 10
+    }
+}
+
+export default About;
+
+
+
+////////////////////////////////////////////////////////////////
+
+const PostPage = () => {
+  return <h1>I am a post!</h1>
+}
+
+export const getStaticPaths = () => {
+  return {
+      paths: [
+        { params: { category: 'tech', id: '1' } },
+        { params: { category: 'whales', id: '2' } }
+      ],
+      fallback: false
+    }
+}
+
+export const getStaticProps = (context) => {
+  return { props: {} }
+}
+
+export default PostPage
