@@ -5,7 +5,9 @@
 		"dev": "nodemon api/app.js",
 		"build": "next build",
 		"start": "NODE_ENV=production node api/app.js",
-		"lint": "next lint"
+		"startLocal": "node api/app.js",
+		"lint": "next lint",
+		"serve": "next start"
 	},
 	"dependencies": {
 		"@prisma/client": "^3.8.0",
@@ -27,6 +29,7 @@
 		"winston": "^3.4.0"
 	},
 	"devDependencies": {
+		"@types/dotenv-safe": "^8.1.2",
 		"@types/node": "^17.0.8",
 		"@types/react": "17.0.38",
 		"@typescript-eslint/eslint-plugin": "^5.9.1",
