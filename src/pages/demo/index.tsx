@@ -1,7 +1,20 @@
 import Link from "next/link";
 import React from "react";
+import { useQuery } from "react-query";
+import PostCard from "../../Components/PostCard";
+import { getHomePagePost } from "../../Queries/queries";
 
 export default function Demo() {
+	const {
+		status,
+		data: post,
+		error,
+		isFetching,
+		isSuccess,
+	} = useQuery("post", async () => await getHomePagePost());
+
+	console.log(status, post);
+
 	return (
 		<div>
 			<div className="">
@@ -15,7 +28,7 @@ export default function Demo() {
 				</div>
 			</div>
 
-			<div className="mt-8 flex lg:mt-0 lg:flex-shrink-0 lg:items-center lg:justify-center">
+			<div className="mt-8 inline-block md:flex lg:flex lg:mt-0 lg:flex-shrink-0 lg:items-center lg:justify-center">
 				<div className="inline-flex rounded-md shadow m-1">
 					<Link href="https://nextjs.org/">
 						<a
@@ -59,6 +72,13 @@ export default function Demo() {
 						</a>
 					</Link>
 				</div>
+			</div>
+
+			<div className="">
+				{post &&
+					post.map((data: any) => {
+						return <PostCard key={data.id} data={data} />;
+					})}
 			</div>
 		</div>
 	);

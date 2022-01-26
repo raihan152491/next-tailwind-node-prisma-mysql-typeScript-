@@ -1,7 +1,11 @@
 import type { AppProps } from "next/app";
 import "../styles/globals.css";
 import "tailwindcss/tailwind.css";
+import { QueryClientProvider, QueryClient } from "react-query";
 import Head from "next/head";
+
+const queryClient = new QueryClient();
+
 function MyApp({ Component, pageProps }: AppProps) {
 	return (
 		<>
@@ -17,7 +21,9 @@ function MyApp({ Component, pageProps }: AppProps) {
 				/>
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
-			<Component {...pageProps} />;
+			<QueryClientProvider client={queryClient}>
+				<Component {...pageProps} />;
+			</QueryClientProvider>
 		</>
 	);
 }
