@@ -1,6 +1,6 @@
 const graphQlApi = process.env.NEXT_PUBLIC_GRAPHQL;
 
-const fetchData = async (query) => {
+const fetchData = async (query, { variables = {} }) => {
 	const headers = { "content-type": "application/json" };
 
 	const res = await fetch(graphQlApi, {
@@ -8,6 +8,7 @@ const fetchData = async (query) => {
 		headers,
 		body: JSON.stringify({
 			query,
+			variables,
 		}),
 	});
 

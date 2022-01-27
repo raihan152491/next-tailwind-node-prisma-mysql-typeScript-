@@ -21,7 +21,8 @@
 		"**/*.js",
 		"**/*.tsx",
 		"api/app.js",
-		"api/routes/User/userRoutes.js"
+		"api/routes/User/userRoutes.js",
+		"src/Components/PostCard.jsx"
 	],
 	"exclude": ["node_modules"]
 }

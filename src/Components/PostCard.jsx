@@ -8,7 +8,7 @@ export default function PostCard({ data }) {
 			{data.featured_image && (
 				<img
 					className="w-full"
-					src={assetUrl + data.featured_image.id}
+					src={`${assetUrl}${data.featured_image.id}`}
 					alt="Sunset in the mountains"
 				/>
 			)}

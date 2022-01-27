@@ -1,19 +1,60 @@
 import Link from "next/link";
-import React from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import PostCard from "../../Components/PostCard";
-import { getHomePagePost } from "../../Queries/queries";
+import axios from "axios";
+import ProductCard from "../../Components/ProductCard";
+import {
+	getHomePageCategory,
+	getHomePageFilterByCategory,
+	getHomePagePost,
+	getHomePageProduct,
+} from "../../Queries/Demo/queries";
+import Filters from "../../Components/Filters";
 
 export default function Demo() {
-	const {
-		status,
-		data: post,
-		error,
-		isFetching,
-		isSuccess,
-	} = useQuery("post", async () => await getHomePagePost());
+	// const {
+	// 	status,
+	// 	data: post,
+	// 	error,
+	// 	isFetching,
+	// 	isSuccess,
+	// } = useQuery("post", async () => await getHomePagePost());
 
-	console.log(status, post);
+	let [selectedCategory, setSelectedCategory] = useState<any[]>([]);
+
+	async function handleProductFiltering({ queryKey }: { queryKey: any }) {
+		const [_] = queryKey;
+		if (_.length) {
+			return await getHomePageFilterByCategory(queryKey[0]);
+		}
+
+		return await getHomePageProduct();
+	}
+	const { status, data, error, isFetching, isSuccess } = useQuery(
+		[selectedCategory],
+		handleProductFiltering
+	);
+
+	const {
+		data: category,
+		error: categoryError,
+		isSuccess: categoryIsSuccess,
+	} = useQuery("category", async () => await getHomePageCategory());
+
+	const getSelectedCategories = (categoryId: any) => {
+		if (selectedCategory.includes(categoryId)) {
+			setSelectedCategory(
+				selectedCategory.filter((c) => c != categoryId)
+			);
+		} else {
+			setSelectedCategory([...selectedCategory, categoryId]);
+		}
+	};
+
+	useEffect(() => {
+		//console.log(selectedCategory);
+	}, [selectedCategory]);
 
 	return (
 		<div>
@@ -74,12 +115,32 @@ export default function Demo() {
 				</div>
 			</div>
 
-			<div className="">
+			<div className="max-w-2xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
+				<h2 className="text-2xl text-center font-extrabold tracking-tight text-gray-900">
+					Latest Product
+				</h2>
+
+				{category && (
+					<Filters
+						categories={category}
+						getSelectedCategories={getSelectedCategories}
+					/>
+				)}
+				<div className="mt-6 justify-between items-center grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+					{data &&
+						data.map((product: any) => {
+							return (
+								<ProductCard key={product.id} data={product} />
+							);
+						})}
+				</div>
+			</div>
+			{/* <div className="">
 				{post &&
 					post.map((data: any) => {
 						return <PostCard key={data.id} data={data} />;
 					})}
-			</div>
+			</div> */}
 		</div>
 	);
 }
